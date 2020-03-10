@@ -5,6 +5,7 @@ import { ThemeProvider } from "styled-components";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import config from "./constants";
+import store from "./store";
 import "./index.css";
 
 ReactDOM.render(

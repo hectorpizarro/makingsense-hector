@@ -2,8 +2,17 @@ const googleApiKey =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_GOOGLE_API_KEY
     : "";
-
-const marvelApiKey = process.env.REACT_APP_MARVEL_API_KEY;
+const marvelApiKey =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_MARVEL_API_KEY
+    : "foo";
+const pageSize = 5;
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://gateway.marvel.com:443/v1/public"
+    : "http://localhost:9000";
+const maxContentLength = 102400;
+const maxPage = 9999;
 
 const theme = {
   fontsize: {
@@ -31,12 +40,27 @@ const theme = {
     size11: "6rem",
     size12: "8rem",
     size13: "10rem"
+  },
+  color: {
+    gray1: "#f7fafc",
+    gray2: "#edf2f7",
+    gray3: "#e2e8f0",
+    gray4: "#cbd5e0",
+    gray5: "#a0aec0",
+    gray7: "#4a5568",
+    gray9: "#1a202c",
+    red: "#f56565",
+    blue: "#4299e1"
   }
 };
 
 const config = {
   googleApiKey,
   marvelApiKey,
+  pageSize,
+  baseUrl,
+  maxContentLength,
+  maxPage,
   theme
 };
 
