@@ -1,97 +1,48 @@
 import React from "react";
-import { Router } from "react-router-dom";
+import { Router, MemoryRouter } from "react-router-dom";
 import { createMemoryHistory } from "history";
-import { render } from "@testing-library/react";
+// import { render } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import sinon from "sinon";
+// import sinon from "sinon";
+import { mount } from "enzyme";
 import App from "./app";
 import store from "./store";
 import config from "./shared/constants";
-import * as Main from "./pages/main/main";
+import Main from "./pages/main/main";
+import Detail from "./pages/detail/detail";
 
 describe("<App />", () => {
-  it.skip("Invalid URL redirects to main", () => {
-    const history = createMemoryHistory({ initialEntries: ["/foo"] });
-    const { container } = render(
-      <Provider store={store}>
-        <ThemeProvider theme={config.theme}>
-          <Router history={history}>
-            <App />
-          </Router>
-        </ThemeProvider>
-      </Provider>
-    );
-    expect(container.innerHTML).toMatch("Page 1 of");
-  });
-
-  it.skip("Invalid page redirects to main on page 1", () => {
-    const history = createMemoryHistory({
-      initialEntries: ["/characters/aaa"]
-    });
-    const { container } = render(
-      <Provider store={store}>
-        <ThemeProvider theme={config.theme}>
-          <Router history={history}>
-            <App />
-          </Router>
-        </ThemeProvider>
-      </Provider>
-    );
-    expect(container.innerHTML).toMatch("Page 1 of");
-  });
-
   beforeAll(function() {
-    sinon.stub(Main, "default").returns(<div>A stub</div>);
+    // sinon.stub(Main, "default").returns(<div>A stub</div>);
   });
 
   it("Load main page 2", () => {
-    const history = createMemoryHistory({
-      initialEntries: ["/characters/2"]
-    });
-    const { container } = render(
+    const wrapper = mount(
       <Provider store={store}>
         <ThemeProvider theme={config.theme}>
-          <Router history={history}>
+          <MemoryRouter initialEntries={["/characters/2"]}>
             <App />
-          </Router>
+          </MemoryRouter>
         </ThemeProvider>
       </Provider>
     );
-    expect(container.innerHTML).toMatch("A stub");
+    const wrapMain = wrapper.find(Main);
+    expect(wrapMain).toHaveLength(1);
+    expect(wrapMain.html()).toMatch("Page 2 of");
   });
 
-  it.skip("Character detail with invalid id redirects to main on page 1", () => {
-    sinon.stub(ToStubComponent, "default").returns(<div>A stub</div>);
-    const history = createMemoryHistory({
-      initialEntries: ["/character/aaa"]
-    });
-    const { container } = render(
+  it("Load detail page with id 2", () => {
+    const wrapper = mount(
       <Provider store={store}>
         <ThemeProvider theme={config.theme}>
-          <Router history={history}>
+          <MemoryRouter initialEntries={["/character/2"]}>
             <App />
-          </Router>
+          </MemoryRouter>
         </ThemeProvider>
       </Provider>
     );
-    expect(container.innerHTML).toMatch("Page 1 of");
+    expect(wrapper.find(Detail)).toHaveLength(1);
   });
-
-  // it("Character detail with valid id", () => {
-  //   const history = createMemoryHistory({
-  //     initialEntries: ["/character/1"]
-  //   });
-  //   const { container } = render(
-  //     <Provider store={store}>
-  //       <ThemeProvider theme={config.theme}>
-  //         <Router history={history}>
-  //           <App />
-  //         </Router>
-  //       </ThemeProvider>
-  //     </Provider>
-  //   );
-  //   expect(container.innerHTML).toMatch("Character Detail");
-  // });
 });
