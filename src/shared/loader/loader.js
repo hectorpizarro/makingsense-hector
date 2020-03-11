@@ -33,8 +33,7 @@ const StyledLoader = styled.div`
   align-items: center;
   justify-content: center;
   color: ${props => props.theme.color.gray5};
-  width: ${props => props.theme.dim.size9};
-  height: ${props => props.theme.dim.size9};
+  height: ${props => props.theme.dim.size10};
 `;
 
 const StyledEllipsis = styled.div`

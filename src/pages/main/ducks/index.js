@@ -9,17 +9,15 @@ export const STATUS_LOADED = "status_loaded";
 const charactersSlice = createSlice({
   name: "characters",
   initialState: {
-    curPage: 1,
     byPage: {}, // pageId: characters
     status: STATUS_LOADING,
     totalPages: 0,
+    page: 1,
     error: ""
   },
   reducers: {
     startLoading(state, action) {
-      const { page } = action.payload;
       state.status = STATUS_LOADING;
-      state.curPage = page;
       state.error = "";
     },
     endLoading(state, action) {
@@ -32,11 +30,15 @@ const charactersSlice = createSlice({
       state.error = error;
     },
     storePage(state, action) {
-      const { totalPages, characters } = action.payload;
-      state.byPage[state.curPage] = characters;
+      const { totalPages, characters, page } = action.payload;
+      state.byPage[page] = characters;
       state.totalPages = totalPages;
       state.status = STATUS_LOADED;
       state.error = "";
+    },
+    setPage(state, action) {
+      const { page } = action.payload;
+      state.page = page;
     }
   }
 });
@@ -45,11 +47,13 @@ export const {
   startLoading,
   endLoading,
   storeError,
-  storePage
+  storePage,
+  setPage
 } = charactersSlice.actions;
 
 export const fetchCharacters = page => async dispatch => {
-  dispatch(startLoading({ page }));
+  dispatch(setPage({ page }));
+  dispatch(startLoading());
   const params = {
     page,
     orderBy: "name",
@@ -83,7 +87,7 @@ export const fetchCharacters = page => async dispatch => {
         nStories
       })
     );
-    dispatch(storePage({ totalPages, characters }));
+    dispatch(storePage({ totalPages, characters, page }));
   } catch (error) {
     // In a production environment we should store error details
     // in an external service like Sentry (https://sentry.io)

@@ -21,6 +21,8 @@ The superhero name
 The superhero image
 The biography of the superhero
 Any links available for the superhero (urls)
+
+
 Requirements
 Use React + Redux
 Setup a Git Repository of your own to upload the code

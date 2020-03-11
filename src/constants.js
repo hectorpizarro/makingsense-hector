@@ -6,7 +6,7 @@ const marvelApiKey =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_MARVEL_API_KEY
     : "foo";
-const pageSize = 5;
+const pageSize = 2;
 const baseUrl =
   process.env.NODE_ENV === "production"
     ? "https://gateway.marvel.com:443/v1/public"
@@ -51,7 +51,9 @@ const theme = {
     gray9: "#1a202c",
     red: "#f56565",
     blue: "#4299e1"
-  }
+  },
+  boxShadow:
+    "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
 };
 
 const config = {
