@@ -32,6 +32,7 @@ const StyledLoader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 2px;
   color: ${props => props.theme.color.gray5};
   height: ${props => props.theme.dim.size10};
 `;

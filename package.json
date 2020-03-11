@@ -19,6 +19,7 @@
     "react-router-dom": "^5.1.2",
     "react-router-ga": "^1.2.3",
     "react-scripts": "3.4.0",
+    "react-toastify": "^5.5.0",
     "redux": "^4.0.5",
     "styled-components": "^5.0.1"
   },
@@ -27,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public",
+    "storybook": "start-storybook -p 9009 -s .storybook/public",
     "build-storybook": "build-storybook -s public",
     "mockserver": "mockserver -p 9000 -m mockserver"
   },
@@ -49,6 +50,8 @@
   "devDependencies": {
     "@storybook/addon-actions": "^5.3.14",
     "@storybook/addon-links": "^5.3.14",
+    "@storybook/addon-notes": "^5.3.14",
+    "@storybook/addon-viewport": "^5.3.14",
     "@storybook/addons": "^5.3.14",
     "@storybook/preset-create-react-app": "^2.0.0",
     "@storybook/react": "^5.3.14",

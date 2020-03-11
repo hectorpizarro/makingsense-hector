@@ -2,9 +2,18 @@ import React from "react";
 import Axios from "axios";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Analytics from "react-router-ga";
+import { toast } from "react-toastify";
 import Main from "./pages/main/main";
 import config from "./constants";
 import Detail from "./pages/detail/detail";
+import "react-toastify/dist/ReactToastify.css";
+
+toast.configure({
+  autoClose: 3000,
+  hideProgressBar: true,
+  newestOnTop: true,
+  draggable: false
+});
 
 /**
  * Axios setup. Set function to transform request data into url encoded string.
@@ -31,7 +40,6 @@ const isNumericParam = (param, max) => {
       return true;
     }
   }
-  console.log("Url param is invalid.");
   return false;
 };
 
@@ -40,24 +48,29 @@ const App = () => {
     <Switch>
       <Route
         path="/characters/:page"
-        render={routeProps =>
-          routeProps.match &&
-          isNumericParam(routeProps.match.params.page, config.maxPage) ? (
-            <Main page={parseInt(routeProps.match.params.page, 10)} />
-          ) : (
-            <Redirect to={{ pathname: "/characters/1" }} />
-          )
-        }
+        render={routeProps => {
+          if (routeProps.match) {
+            if (isNumericParam(routeProps.match.params.page, config.maxPage)) {
+              return <Main page={parseInt(routeProps.match.params.page, 10)} />;
+            } else {
+              toast.error("Invalid page, redirect to main page.");
+              return <Redirect to={{ pathname: "/characters/1" }} />;
+            }
+          }
+        }}
       />
       <Route
         path="/character/:id"
-        render={routeProps =>
-          routeProps.match && isNumericParam(routeProps.match.params.id) ? (
-            <Detail id={parseInt(routeProps.match.params.id, 10)} />
-          ) : (
-            <Redirect to={{ pathname: "/characters/1" }} />
-          )
-        }
+        render={routeProps => {
+          if (routeProps.match) {
+            if (isNumericParam(routeProps.match.params.id)) {
+              return <Detail id={parseInt(routeProps.match.params.id, 10)} />;
+            } else {
+              toast.error("Invalid character id, redirect to main page.");
+              return <Redirect to={{ pathname: "/characters/1" }} />;
+            }
+          }
+        }}
       />
       {/* Unknown routes redirect to main page */}
       <Route path="*">

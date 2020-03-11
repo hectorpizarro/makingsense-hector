@@ -12,6 +12,7 @@ import {
 } from "./ducks";
 import Card from "./card";
 import Pagination from "./pagination";
+import { toast } from "react-toastify";
 
 const StyledMain = styled.main`
   padding: ${props => props.theme.dim.size4};
@@ -47,7 +48,9 @@ const Main = ({
   useEffect(() => {
     if (loadStatus === STATUS_LOADED) {
       if (loadError) {
-        console.log("Error loading experiences data, please reload.");
+        toast.error("Error loading experiences data, please reload.");
+        // Error message should be logged to external service like Sentry
+        console.log(loadError);
       }
       dispatch(endLoading());
     }

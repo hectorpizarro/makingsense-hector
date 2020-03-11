@@ -10,17 +10,24 @@ import { withRouter } from "react-router-dom";
 import { STATUS_LOADING } from "./ducks";
 
 const StyledPagination = styled.div`
-  text-align: right;
+  font-size: ${props => props.theme.fontsize.xs};
+  text-align: center;
+  min-width: 260px;
   padding: ${props => {
     const { size2, size4 } = props.theme.dim;
     return `${size2} ${size2} ${size4} ${size2}`;
   }};
   margin-bottom: ${props => props.theme.dim.size4};
   border-bottom: 1px solid ${props => props.theme.color.gray3};
+
+  @media (min-width: 640px) {
+    font-size: ${props => props.theme.fontsize.base};
+    text-align: right;
+  }
 `;
 
 const StyledButton = styled.button`
-  margin-left: ${props => props.theme.dim.size4};
+  margin-left: ${props => props.theme.dim.size2};
   padding: ${props => {
     const { size2, size3 } = props.theme.dim;
     return `${size2} ${size3}`;
@@ -28,25 +35,32 @@ const StyledButton = styled.button`
   border: 1px solid ${props => props.theme.color.gray5};
   border-radius: ${props => props.theme.dim.size2};
   cursor: ${props => (props.disabled ? "default" : "pointer")};
+  @media (min-width: 640px) {
+    margin-left: ${props => props.theme.dim.size4};
+  }
 `;
 
 const StyledPage = styled.span`
   display: ${props => (props.show ? "inline" : "none")};
-  margin-right: ${props => props.theme.dim.size4};
+  margin-right: ${props => props.theme.dim.size1};
+  @media (min-width: 640px) {
+    margin-right: ${props => props.theme.dim.size4};
+  }
 `;
 
 const StyledIconLeft = styled(FontAwesomeIcon)`
   color: ${props =>
     props.disabled ? props.theme.color.gray3 : props.theme.color.blue};
   width: ${props => props.theme.dim.size3};
-  padding-right: 4px;
+  padding-right: ${props => props.theme.dim.size2};
 `;
 
 const StyledIconRight = styled(StyledIconLeft)`
-  padding-left: 4px;
+  padding-left: ${props => props.theme.dim.size2};
 `;
 
-const Pagination = ({ totalPages, page, history, loadStatus }) => {
+// Export component without route for testing purposes.
+export const PurePagination = ({ totalPages, page, history, loadStatus }) => {
   const handlePrevious = () => history.push(`/characters/${page - 1}`);
 
   const handleNext = () => history.push(`/characters/${page + 1}`);
@@ -80,10 +94,12 @@ const Pagination = ({ totalPages, page, history, loadStatus }) => {
   );
 };
 
-Pagination.propTypes = {
+PurePagination.propTypes = {
   totalPages: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
   history: PropTypes.object.isRequired // Provided automatically by withRouter
 };
 
-export default withRouter(Pagination);
+const Pagination = withRouter(PurePagination);
+
+export default Pagination;
