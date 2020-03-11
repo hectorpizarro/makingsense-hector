@@ -14,6 +14,7 @@ const StyledCard = styled.button`
   text-align: left;
   cursor: pointer;
 `;
+
 const StyledCardGrid = styled.div`
   display: grid;
   justify-content: stretch;
@@ -84,19 +85,19 @@ const StyledImg = styled.img`
   object-fit: scale-down;
 `;
 
-const StyledIconYes = styled(FontAwesomeIcon)`
+export const StyledIconYes = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.blue};
   width: ${props => props.theme.dim.size3};
   padding-right: ${props => props.theme.dim.size1};
 `;
 
-const StyledIconNo = styled(FontAwesomeIcon)`
+export const StyledIconNo = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.red};
   width: ${props => props.theme.dim.size3};
   padding-right: ${props => props.theme.dim.size1};
 `;
 
-const Card = ({ characterId, character }) => {
+const Card = ({ character }) => {
   const renderRow = (counter, singular, plural) => {
     const label = counter === 1 ? singular : plural;
     if (counter > 0) {
@@ -117,7 +118,7 @@ const Card = ({ characterId, character }) => {
   };
 
   return (
-    <StyledCard key={characterId}>
+    <StyledCard>
       <StyledCardGrid>
         <div className="thumb">
           <StyledImg src={character.image} alt="thumbnail" />
@@ -141,8 +142,7 @@ const Card = ({ characterId, character }) => {
 };
 
 Card.propTypes = {
-  characterId: PropTypes.number.isRequired,
-  character: PropTypes.object
+  character: PropTypes.object.isRequired
 };
 
 export default Card;

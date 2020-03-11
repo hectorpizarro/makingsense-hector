@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import App from "./App";
+import App from "./app";
 import * as serviceWorker from "./serviceWorker";
-import config from "./constants";
+import config from "./shared/constants";
 import store from "./store";
 import "./index.css";
 

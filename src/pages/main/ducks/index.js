@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
-import config from "../../../constants";
+import config from "../../../shared/constants";
 
 // Request is completed, show list.
 export const STATUS_IDLE = "status_idle";

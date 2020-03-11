@@ -1,7 +1,7 @@
 import React from "react";
 import { addDecorator, addParameters } from "@storybook/react";
 import { ThemeProvider } from "styled-components";
-import config from "../src/constants";
+import config from "../src/shared/constants";
 import "../src/index.css";
 
 const addTheme = storyFn => (

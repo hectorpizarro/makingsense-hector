@@ -3,10 +3,10 @@ import Axios from "axios";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Analytics from "react-router-ga";
 import { toast } from "react-toastify";
-import Main from "./pages/main/main";
-import config from "./constants";
-import Detail from "./pages/detail/detail";
 import "react-toastify/dist/ReactToastify.css";
+import Main from "./pages/main/main";
+import config from "./shared/constants";
+import Detail from "./pages/detail/detail";
 
 toast.configure({
   autoClose: 3000,
@@ -54,7 +54,7 @@ const App = () => {
               return <Main page={parseInt(routeProps.match.params.page, 10)} />;
             } else {
               toast.error("Invalid page, redirect to main page.");
-              return <Redirect to={{ pathname: "/characters/1" }} />;
+              return <Redirect to="/characters/1" />;
             }
           }
         }}
@@ -66,15 +66,19 @@ const App = () => {
             if (isNumericParam(routeProps.match.params.id)) {
               return <Detail id={parseInt(routeProps.match.params.id, 10)} />;
             } else {
+              console.log(
+                "Invalid character id, redirect to main page.",
+                routeProps.match.params
+              );
               toast.error("Invalid character id, redirect to main page.");
-              return <Redirect to={{ pathname: "/characters/1" }} />;
+              return <Redirect to="/characters/1" />;
             }
           }
         }}
       />
       {/* Unknown routes redirect to main page */}
       <Route path="*">
-        <Redirect to={{ pathname: "/characters/1" }} />
+        <Redirect to="/characters/1" />
       </Route>
     </Switch>
   );

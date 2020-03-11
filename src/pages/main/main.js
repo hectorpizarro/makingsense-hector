@@ -50,7 +50,7 @@ const Main = ({
       if (loadError) {
         toast.error("Error loading experiences data, please reload.");
         // Error message should be logged to external service like Sentry
-        console.log(loadError);
+        // console.log(loadError);
       }
       dispatch(endLoading());
     }

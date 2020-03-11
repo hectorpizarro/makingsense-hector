@@ -9,7 +9,6 @@ export default {
   }
 };
 
-const characterId = 1;
 const character = {
   id: 1009146,
   name: "Abomination (Emil Blonsky)",
@@ -20,18 +19,14 @@ const character = {
   nEvents: 1
 };
 
-export const Desktop1024x768 = () => (
-  <Card characterId={characterId} character={character} />
-);
+export const Desktop1024x768 = () => <Card character={character} />;
 Desktop1024x768.story = {
   parameters: {
     viewport: { defaultViewport: "desktop" }
   }
 };
 
-export const Mobile320x568 = () => (
-  <Card characterId={characterId} character={character} />
-);
+export const Mobile320x568 = () => <Card character={character} />;
 Mobile320x568.story = {
   parameters: {
     viewport: { defaultViewport: "iphone5" }
