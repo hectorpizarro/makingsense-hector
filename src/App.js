@@ -53,7 +53,7 @@ const App = () => {
             if (isNumericParam(routeProps.match.params.page, config.maxPage)) {
               return <Main page={parseInt(routeProps.match.params.page, 10)} />;
             } else {
-              toast.error("Invalid page, redirect to main page.");
+              // toast.error("Invalid page, redirect to main page.");
               return <Redirect to="/characters/1" />;
             }
           }
@@ -66,11 +66,7 @@ const App = () => {
             if (isNumericParam(routeProps.match.params.id)) {
               return <Detail id={parseInt(routeProps.match.params.id, 10)} />;
             } else {
-              console.log(
-                "Invalid character id, redirect to main page.",
-                routeProps.match.params
-              );
-              toast.error("Invalid character id, redirect to main page.");
+              // toast.error("Invalid character id, redirect to main page.");
               return <Redirect to="/characters/1" />;
             }
           }

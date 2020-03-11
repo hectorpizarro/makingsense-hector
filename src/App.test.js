@@ -1,11 +1,8 @@
 import React from "react";
-import { Router, MemoryRouter } from "react-router-dom";
-import { createMemoryHistory } from "history";
-// import { render } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom/extend-expect";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
-// import sinon from "sinon";
 import { mount } from "enzyme";
 import App from "./app";
 import store from "./store";
@@ -14,10 +11,6 @@ import Main from "./pages/main/main";
 import Detail from "./pages/detail/detail";
 
 describe("<App />", () => {
-  beforeAll(function() {
-    // sinon.stub(Main, "default").returns(<div>A stub</div>);
-  });
-
   it("Load main page 2", () => {
     const wrapper = mount(
       <Provider store={store}>
@@ -44,5 +37,50 @@ describe("<App />", () => {
       </Provider>
     );
     expect(wrapper.find(Detail)).toHaveLength(1);
+  });
+
+  it("Redirect on bad Url", () => {
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={config.theme}>
+          <MemoryRouter initialEntries={["/foo"]}>
+            <App />
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>
+    );
+    const wrapMain = wrapper.find(Main);
+    expect(wrapMain).toHaveLength(1);
+    expect(wrapMain.html()).toMatch("Page 1 of");
+  });
+
+  it("Redirect on bad page id", () => {
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={config.theme}>
+          <MemoryRouter initialEntries={["/characters/foo"]}>
+            <App />
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>
+    );
+    const wrapMain = wrapper.find(Main);
+    expect(wrapMain).toHaveLength(1);
+    expect(wrapMain.html()).toMatch("Page 1 of");
+  });
+
+  it("Redirect on bad character id", () => {
+    const wrapper = mount(
+      <Provider store={store}>
+        <ThemeProvider theme={config.theme}>
+          <MemoryRouter initialEntries={["/character/foo"]}>
+            <App />
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>
+    );
+    const wrapMain = wrapper.find(Main);
+    expect(wrapMain).toHaveLength(1);
+    expect(wrapMain.html()).toMatch("Page 1 of");
   });
 });
