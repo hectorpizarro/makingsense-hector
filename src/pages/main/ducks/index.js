@@ -2,33 +2,46 @@ import { createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 import config from "../../../constants";
 
+// Request is completed, show list.
 export const STATUS_IDLE = "status_idle";
+
+// API request in progress, used to show loader.
 export const STATUS_LOADING = "status_loading";
+
+// Page is loaded, result or error is waiting to be handled.
+// Used to show error message if available.
 export const STATUS_LOADED = "status_loaded";
 
 const charactersSlice = createSlice({
   name: "characters",
   initialState: {
-    byPage: {}, // pageId: characters
-    status: STATUS_LOADING,
-    totalPages: 0,
-    page: 1,
-    error: ""
+    byPage: {}, // key is page, content is characters array
+    status: STATUS_LOADING, // used to toggle loader
+    totalPages: 0, // sent on every request
+    page: 1, // current page ,as received from URL param
+    error: "" // error message from API request
   },
   reducers: {
+    // Set status to 'loading', shows loader
     startLoading(state, action) {
       state.status = STATUS_LOADING;
       state.error = "";
     },
+
+    // Set status to 'idle', show characters list
     endLoading(state, action) {
       state.status = STATUS_IDLE;
       state.error = "";
     },
+
+    // Set status to 'loaded' and store error
     storeError(state, action) {
       const { error = "Unknown error" } = action.payload;
       state.status = STATUS_LOADED;
       state.error = error;
     },
+
+    // Set status to loaded, store page characters and total pages
     storePage(state, action) {
       const { totalPages, characters, page } = action.payload;
       state.byPage[page] = characters;
@@ -36,6 +49,8 @@ const charactersSlice = createSlice({
       state.status = STATUS_LOADED;
       state.error = "";
     },
+
+    // Store page as received from URL param
     setPage(state, action) {
       const { page } = action.payload;
       state.page = page;
@@ -51,9 +66,24 @@ export const {
   setPage
 } = charactersSlice.actions;
 
-export const fetchCharacters = page => async dispatch => {
-  dispatch(setPage({ page }));
-  dispatch(startLoading());
+/**
+ * Stores provided page characters list. Sends API request only if page wasn't
+ * already stored. Array item is an object with format:
+ *   {id, name, image, nComics, nSeries, nEvents, nStories}
+ * @param {Number} page - Page , will be stored on reducer
+ * @param {Array} charactersByPage - store.characters.byPage
+ */
+export const fetchPageCharacters = (
+  page,
+  charactersByPage
+) => async dispatch => {
+  dispatch(setPage({ page })); // Store page
+  if (charactersByPage[page]) {
+    return; // Page already stored, exit
+  }
+  // Page was not stored, start request
+
+  dispatch(startLoading()); // Set status to show loader
   const params = {
     page,
     orderBy: "name",
@@ -87,6 +117,8 @@ export const fetchCharacters = page => async dispatch => {
         nStories
       })
     );
+
+    // Request successful, store pages total, characters array, page
     dispatch(storePage({ totalPages, characters, page }));
   } catch (error) {
     // In a production environment we should store error details
@@ -106,6 +138,8 @@ export const fetchCharacters = page => async dispatch => {
       // Something happened in setting up the request that triggered an Error
       console.log("Error", error.message);
     }
+
+    // Request error, store error message
     dispatch(storeError(error.message));
   }
 };

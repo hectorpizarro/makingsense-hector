@@ -4,7 +4,7 @@ import { connect, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Loader from "../../shared/loader/loader";
 import {
-  fetchCharacters,
+  fetchPageCharacters,
   STATUS_LOADING,
   STATUS_IDLE,
   STATUS_LOADED,
@@ -21,18 +21,25 @@ const StyledTitle = styled.h2`
   padding: ${props => props.theme.dim.size2};
 `;
 
-const Main = ({ characters, loadStatus, loadError, page, totalPages }) => {
+const Main = ({
+  charactersByPage,
+  pageCharacters,
+  loadStatus,
+  loadError,
+  page,
+  totalPages
+}) => {
   const dispatch = useDispatch();
 
   // Called once when component is mounted
   useEffect(() => {
-    dispatch(fetchCharacters(page));
+    dispatch(fetchPageCharacters(page, charactersByPage));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Called every time page changes on url
   useEffect(() => {
-    dispatch(fetchCharacters(page));
+    dispatch(fetchPageCharacters(page, charactersByPage));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
@@ -66,9 +73,9 @@ const Main = ({ characters, loadStatus, loadError, page, totalPages }) => {
           <StyledTitle>Marvel Characters</StyledTitle>
           <Pagination totalPages={totalPages} page={page} />
           <div>
-            {characters.length === 0
+            {pageCharacters.length === 0
               ? "No characters on this page."
-              : characters.map(character => (
+              : pageCharacters.map(character => (
                   <Card
                     key={character.id}
                     characterId={character.id}
@@ -87,6 +94,7 @@ const Main = ({ characters, loadStatus, loadError, page, totalPages }) => {
 };
 
 Main.propTypes = {
+  pageCharacters: PropTypes.array,
   characters: PropTypes.array,
   loadStatus: PropTypes.string.isRequired,
   loaderror: PropTypes.string,
@@ -96,7 +104,8 @@ Main.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  characters: state.characters.byPage[state.characters.page] || [],
+  pageCharacters: state.characters.byPage[state.characters.page] || [],
+  charactersByPage: state.characters.byPage,
   loadStatus: state.characters.status,
   loadError: state.characters.error,
   totalPages: state.characters.totalPages

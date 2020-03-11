@@ -31,6 +31,7 @@ const StyledButton = styled.button`
 `;
 
 const StyledPage = styled.span`
+  display: ${props => (props.show ? "inline" : "none")};
   margin-right: ${props => props.theme.dim.size4};
 `;
 
@@ -52,7 +53,7 @@ const Pagination = ({ totalPages, page, history, loadStatus }) => {
 
   return (
     <StyledPagination>
-      <StyledPage>
+      <StyledPage show={totalPages > 0}>
         Page {page} of {totalPages}
       </StyledPage>
       <StyledButton

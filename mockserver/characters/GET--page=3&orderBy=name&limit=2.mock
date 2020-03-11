@@ -3,4 +3,4 @@ Content-Type: application/json; charset=utf-8
 Access-Control-Allow-Origin: *
 Response-Delay: 1000
 
-#import './get.json';
+#import './GET--page=3&orderBy=name&limit=2.json';
