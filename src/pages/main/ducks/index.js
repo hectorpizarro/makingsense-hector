@@ -86,10 +86,9 @@ export const fetchPageCharacters = (
 
   dispatch(startLoading()); // Set status to show loader
   const params = {
-    offset: page - 1,
+    offset: (page - 1) * config.pageSize,
     orderBy: "name",
-    limit: config.pageSize,
-    apikey: config.marvelApiKey
+    limit: config.pageSize
   };
   try {
     // Send API request. base url and apiKey are added in Axios setup in app.js

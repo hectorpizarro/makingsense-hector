@@ -24,7 +24,6 @@ toast.configure({
 /**
  * Axios setup. Set function to transform request data into url encoded string.
  */
-Axios.defaults.baseURL = config.baseUrl;
 Axios.defaults.maxContentLength = config.maxContentLength;
 
 /**

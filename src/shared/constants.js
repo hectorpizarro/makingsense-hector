@@ -7,20 +7,8 @@ const googleApiKey =
     ? process.env.REACT_APP_GOOGLE_API_KEY
     : "";
 
-// Marvel API key. In development we use mockserver and a fake key.
-const marvelApiKey =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_MARVEL_API_KEY
-    : "foo";
-
-// Url prefix to use on all API requests
-const baseUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://gateway.marvel.com:443/v1/public"
-    : "http://localhost:9000";
-
 // Size of a page in Main
-const pageSize = 2;
+const pageSize = 5;
 
 // Max content length supported by Axios requests in bytes
 const maxContentLength = 102400;
@@ -97,9 +85,7 @@ export const STATUS_LOADED = "status_loaded";
 
 const config = {
   googleApiKey,
-  marvelApiKey,
   pageSize,
-  baseUrl,
   maxContentLength,
   maxPage,
   urlLabels,
