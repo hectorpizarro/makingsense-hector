@@ -1,6 +1,11 @@
 // Storybook tests for Card component
 import React from "react";
 import Card from "./card";
+import { Provider } from "react-redux";
+import store from "../../store";
+import { ThemeProvider } from "styled-components";
+import config from "../../shared/constants";
+import { MemoryRouter } from "react-router-dom";
 
 export default {
   title: "Main / Card",
@@ -21,7 +26,15 @@ const character = {
 };
 
 // Test on Desktop
-export const Desktop1024x768 = () => <Card character={character} />;
+export const Desktop1024x768 = () => (
+  <Provider store={store}>
+    <ThemeProvider theme={config.theme}>
+      <MemoryRouter>
+        <Card character={character} />
+      </MemoryRouter>
+    </ThemeProvider>
+  </Provider>
+);
 Desktop1024x768.story = {
   parameters: {
     viewport: { defaultViewport: "desktop" }
@@ -29,7 +42,15 @@ Desktop1024x768.story = {
 };
 
 // Test on mobile
-export const Mobile320x568 = () => <Card character={character} />;
+export const Mobile320x568 = () => (
+  <Provider store={store}>
+    <ThemeProvider theme={config.theme}>
+      <MemoryRouter>
+        <Card character={character} />
+      </MemoryRouter>
+    </ThemeProvider>
+  </Provider>
+);
 Mobile320x568.story = {
   parameters: {
     viewport: { defaultViewport: "iphone5" }
