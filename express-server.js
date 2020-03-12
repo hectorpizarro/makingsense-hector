@@ -29,7 +29,6 @@ app.get("/characters", async (req, res) => {
     apikey: process.env.REACT_APP_MARVEL_API_KEY
   };
   try {
-    console.log("req", req);
     const response = await Axios.get("/characters", { params });
     res.status(200).json(response.data);
   } catch (error) {
@@ -47,5 +46,10 @@ app.get("/characters/:id", async (req, res) => {
     res.status(error.response.status).json(error.response.message);
   }
 });
+
+// Default route loads build/index.html
+app.use((req, res) =>
+  res.sendFile(path.join(__dirname, "build", "index.html"))
+);
 
 app.listen(process.env.PORT || 9001);
