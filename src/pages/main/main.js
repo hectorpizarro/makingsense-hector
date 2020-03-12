@@ -1,3 +1,4 @@
+// Main component, shows characters lists using pagination
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
@@ -23,7 +24,7 @@ const Main = ({
 }) => {
   const dispatch = useDispatch();
 
-  // Called every time page changes on url
+  // Called every time page parameter changes on url
   useEffect(() => {
     dispatch(fetchPageCharacters(page, charactersByPage));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,8 +43,10 @@ const Main = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadStatus]);
 
+  // Render component based on status
   switch (loadStatus) {
     case STATUS_LOADING:
+      // Show loader
       return (
         <PageWrap title="Marvel Characters">
           <div>
@@ -57,6 +60,7 @@ const Main = ({
         </PageWrap>
       );
     case STATUS_IDLE: {
+      // Show characters list
       return (
         <PageWrap title="Marvel Characters">
           <div>
@@ -75,27 +79,35 @@ const Main = ({
       );
     }
     case STATUS_LOADED:
+      // API response received, wait for error message to show (if any), then useEffect will change status again to show list
       return null;
     default:
+      // Unknown status, maybe added to src/pages/main/ducks/index.js but not defined here?
       return null;
   }
 };
 
 Main.propTypes = {
-  pageCharacters: PropTypes.array,
+  pageCharacters: PropTypes.array, // characters list to show
+  // all characters currently stored on Redux
   charactersByPage: PropTypes.object,
+  // Status flag used to show loader
   loadStatus: PropTypes.string.isRequired,
-  loadError: PropTypes.string,
+  loadError: PropTypes.string, // API request error, if any
+  // Total pages, based on API response extra information
   totalPages: PropTypes.number.isRequired,
-  // Provided from route
+  // Provided from route on <App>
   page: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
+  // characters list to show based on current page, empty if not available
   pageCharacters: state.characters.byPage[state.characters.page] || [],
+  // All characters stored by page
   charactersByPage: state.characters.byPage,
-  loadStatus: state.characters.status,
-  loadError: state.characters.error,
+  loadStatus: state.characters.status, // status
+  loadError: state.characters.error, // error message
+  // total pages as evaluated from each API response
   totalPages: state.characters.totalPages
 });
 

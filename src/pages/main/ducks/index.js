@@ -1,3 +1,4 @@
+// "characters" slice, used on Main to manage characters list.
 import { createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 import config, {
@@ -7,13 +8,16 @@ import config, {
 } from "../../../shared/constants";
 
 const charactersSlice = createSlice({
-  name: "characters",
+  name: "characters", // slice name, used in components as state.characters
   initialState: {
-    byPage: {}, // key is page, content is characters array
+    byPage: {}, // for each child key is page, content is characters array
     status: STATUS_LOADING, // used to toggle loader
-    totalPages: 0, // sent on every request
-    page: 1, // current page ,as received from URL param
-    error: "" // error message from API request
+    totalPages: 0, // set after every API request
+    // Originally defined as URL param, stored here as single point of truth.
+    // Anytime a component wants to update the page it is updated in the url
+    // and eventually cascades to be updated here.
+    page: 1,
+    error: "" // error message from an API request
   },
   reducers: {
     // Set status to 'loading', shows loader
@@ -44,20 +48,21 @@ const charactersSlice = createSlice({
       state.error = "";
     },
 
-    // Store page as received from URL param
-    setPage(state, action) {
+    // Store page number as received from URL param
+    storePageId(state, action) {
       const { page } = action.payload;
       state.page = page;
     }
   }
 });
 
+// Export and make actions available
 export const {
   startLoading,
   endLoading,
   storeError,
   storePage,
-  setPage
+  storePageId
 } = charactersSlice.actions;
 
 /**
@@ -71,7 +76,7 @@ export const fetchPageCharacters = (
   page,
   charactersByPage
 ) => async dispatch => {
-  dispatch(setPage({ page })); // Store page
+  dispatch(storePageId({ page })); // First store page id
   if (charactersByPage[page]) {
     return; // Page already stored, exit
   }
@@ -84,14 +89,19 @@ export const fetchPageCharacters = (
     limit: config.pageSize
   };
   try {
+    // Send API request. base url and apiKey are added in Axios setup in app.js
     const response = await Axios.get("/characters", { params });
 
+    // Destructure response to obtain total and results
     const {
       data: {
         data: { total, results }
       }
     } = response;
+    // Calculate total pages based on total records and page size
     const totalPages = total === 0 ? 1 : Math.ceil(total / config.pageSize);
+
+    // Store results in 'characters' array, destructuring each record to get only relevant information.
     const characters = results.map(
       ({
         id,
@@ -117,25 +127,10 @@ export const fetchPageCharacters = (
   } catch (error) {
     // In a production environment we should store error details
     // in an external service like Sentry (https://sentry.io)
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else if (error.request) {
-      // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-      // http.ClientRequest in node.js
-      console.log(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.log("Error", error.message);
-    }
-
     // Request error, store error message
-    dispatch(storeError(error.message));
+    dispatch(storeError(error.message || "Unknown error"));
   }
 };
 
+// Reducer function as used by combineReducers
 export default charactersSlice.reducer;

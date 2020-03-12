@@ -1,3 +1,8 @@
+/**
+ * First component loaded in the application, used for:
+ * - Initializes libraries: react-toastify, Axios.
+ * - Provides routing using react-router-dom.
+ */
 import React from "react";
 import Axios from "axios";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
@@ -8,6 +13,7 @@ import Main from "./pages/main/main";
 import config from "./shared/constants";
 import Detail from "./pages/detail/detail";
 
+// Toast setup.
 toast.configure({
   autoClose: 3000,
   hideProgressBar: true,
@@ -27,6 +33,14 @@ Axios.defaults.transformRequest = (obj = {}) => {
     .join("&");
 };
 
+/**
+ * Returns true if provided 'param' is a numeric int string and:
+ * - If 'max' is provided, value should be between [1, max].
+ * - If no 'max' defined value should be between [1 ... ].
+ * @param {String} param - Value to test as numeric
+ * @param {Number} max - Hard limit, max value allowed for param
+ * @returns {Boolean}
+ */
 const isNumericParam = (param, max) => {
   if (/^\d+$/.test(param)) {
     // Param is numeric string
@@ -51,9 +65,10 @@ const App = () => {
         render={routeProps => {
           if (routeProps.match) {
             if (isNumericParam(routeProps.match.params.page, config.maxPage)) {
+              // Render Main if page is valid
               return <Main page={parseInt(routeProps.match.params.page, 10)} />;
             } else {
-              // toast.error("Invalid page, redirect to main page.");
+              // page invalid, redirect to first page
               return <Redirect to="/characters/1" />;
             }
           }
@@ -64,15 +79,16 @@ const App = () => {
         render={routeProps => {
           if (routeProps.match) {
             if (isNumericParam(routeProps.match.params.id)) {
+              // Render Detail if id is valid
               return <Detail id={parseInt(routeProps.match.params.id, 10)} />;
             } else {
-              // toast.error("Invalid character id, redirect to main page.");
+              // id invalid, redirect to Main on first page
               return <Redirect to="/characters/1" />;
             }
           }
         }}
       />
-      {/* Unknown routes redirect to main page */}
+      {/* Unknown routes redirect to Main on first page */}
       <Route path="*">
         <Redirect to="/characters/1" />
       </Route>
@@ -81,6 +97,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      {/* If Google API provided use Analytics */}
       {config.googleApiKey ? (
         <Analytics id={config.googleApiKey}>{renderRouter()}</Analytics>
       ) : (

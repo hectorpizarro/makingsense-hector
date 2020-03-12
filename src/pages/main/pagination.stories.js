@@ -1,3 +1,4 @@
+// Storybook tests for Pagination component
 import React from "react";
 import { PurePagination } from "./pagination";
 
@@ -9,6 +10,7 @@ export default {
   }
 };
 
+// Test buttons active
 export const Desktop = () => (
   <PurePagination totalPages={3} page={2} history={[]} />
 );
@@ -17,6 +19,8 @@ Desktop.story = {
     viewport: { defaultViewport: "desktop" }
   }
 };
+
+// Test buttons disabled
 export const DesktopAllDisabled = () => (
   <PurePagination totalPages={1} page={1} history={[]} />
 );
@@ -25,6 +29,8 @@ DesktopAllDisabled.story = {
     viewport: { defaultViewport: "desktop" }
   }
 };
+
+// Test Previous button disabled
 export const DesktopAllNoPrevious = () => (
   <PurePagination totalPages={2} page={1} history={[]} />
 );
@@ -33,6 +39,8 @@ DesktopAllNoPrevious.story = {
     viewport: { defaultViewport: "desktop" }
   }
 };
+
+// Test Next button disabled
 export const DesktopAllNoNext = () => (
   <PurePagination totalPages={2} page={2} history={[]} />
 );
@@ -42,6 +50,7 @@ DesktopAllNoNext.story = {
   }
 };
 
+// Test on mobile
 export const Mobile320x568 = () => (
   <PurePagination totalPages={3} page={2} history={[]} />
 );

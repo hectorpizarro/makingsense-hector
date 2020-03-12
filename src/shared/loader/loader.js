@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+// Keyframes for step 1
 const ldsEllipsis1 = keyframes`
   0% {
     transform: scale(0);
@@ -10,6 +11,7 @@ const ldsEllipsis1 = keyframes`
   }
 `;
 
+// Keyframes for step 2
 const ldsEllipsis2 = keyframes`
   0% {
     transform: translate(0, 0);
@@ -19,6 +21,7 @@ const ldsEllipsis2 = keyframes`
   }
 `;
 
+// Keyframes for step 3
 const ldsEllipsis3 = keyframes`
   0% {
     transform: scale(1);
@@ -28,6 +31,7 @@ const ldsEllipsis3 = keyframes`
   }
 `;
 
+// Styles for container
 const StyledLoader = styled.div`
   display: flex;
   align-items: center;
@@ -37,6 +41,7 @@ const StyledLoader = styled.div`
   height: ${props => props.theme.dim.size10};
 `;
 
+// Styles for loader
 const StyledEllipsis = styled.div`
   display: inline-block;
   position: relative;
@@ -61,6 +66,7 @@ const StyledEllipsis = styled.div`
   }
 `;
 
+// Styles for each dot inside loader
 const StyledStep = styled.div`
   position: absolute;
   top: 27px;

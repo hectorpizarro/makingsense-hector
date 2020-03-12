@@ -1,3 +1,4 @@
+// Unit test for loader.
 import React from "react";
 import { mount } from "enzyme";
 import { ThemeProvider } from "styled-components";
@@ -8,7 +9,7 @@ const MyThemeProvider = ({ children }) => (
   <ThemeProvider theme={config.theme}>{children}</ThemeProvider>
 );
 
-describe.skip("<Loader />", () => {
+describe("<Loader />", () => {
   it("Renders without crashing", () => {
     mount(<Loader />, {
       wrappingComponent: MyThemeProvider

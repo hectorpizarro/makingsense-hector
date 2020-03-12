@@ -8,6 +8,11 @@ import config from "./shared/constants";
 import store from "./store";
 import "./index.css";
 
+/**
+ * The start of the whole app. Mounts the app in the 'root' DOM node and provides:
+ * - Redux store
+ * - styled-components theme
+ */
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={config.theme}>

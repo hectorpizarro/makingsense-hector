@@ -1,9 +1,10 @@
+// unit tests "characters" slice actions, reducers.
 import {
   startLoading,
   endLoading,
   storeError,
   storePage,
-  setPage
+  storePageId
 } from "./index";
 import charactersReducer from "./index";
 import {
@@ -50,13 +51,13 @@ describe("Redux characters slice", () => {
       );
     });
 
-    it("setPage()", () => {
+    it("storePageId()", () => {
       const page = 123;
       const expectedAction = {
-        type: "characters/setPage",
+        type: "characters/storePageId",
         payload: { page }
       };
-      expect(setPage({ page })).toEqual(expectedAction);
+      expect(storePageId({ page })).toEqual(expectedAction);
     });
   });
 
@@ -115,10 +116,10 @@ describe("Redux characters slice", () => {
       });
     });
 
-    it("should handle setPage()", () => {
+    it("should handle storePageId()", () => {
       const initial = { ...initialState };
       const page = 3;
-      expect(charactersReducer(initial, setPage({ page }))).toEqual({
+      expect(charactersReducer(initial, storePageId({ page }))).toEqual({
         ...initialState,
         page
       });

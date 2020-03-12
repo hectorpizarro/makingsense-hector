@@ -1,3 +1,4 @@
+// Storybook tests for Card component
 import React from "react";
 import Card from "./card";
 
@@ -19,6 +20,7 @@ const character = {
   nEvents: 1
 };
 
+// Test on Desktop
 export const Desktop1024x768 = () => <Card character={character} />;
 Desktop1024x768.story = {
   parameters: {
@@ -26,6 +28,7 @@ Desktop1024x768.story = {
   }
 };
 
+// Test on mobile
 export const Mobile320x568 = () => <Card character={character} />;
 Mobile320x568.story = {
   parameters: {

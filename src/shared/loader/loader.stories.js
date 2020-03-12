@@ -1,3 +1,4 @@
+// Storybook tests for loader
 import React from "react";
 import Loader from "./loader";
 
@@ -13,6 +14,7 @@ export default {
   ]
 };
 
+// Loader on desktop
 export const Desktop1024x768 = () => <Loader />;
 Desktop1024x768.story = {
   parameters: {
@@ -20,6 +22,7 @@ Desktop1024x768.story = {
   }
 };
 
+// Loader on mobile
 export const Mobile320x568 = () => <Loader />;
 Mobile320x568.story = {
   parameters: {

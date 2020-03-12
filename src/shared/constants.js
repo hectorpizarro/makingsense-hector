@@ -1,25 +1,41 @@
+// ----------------------------------------------------------
+// --- Values to provide to the app in a config object    ---
+// ----------------------------------------------------------
+// Google API key. Analytics is used only if this is defined.
 const googleApiKey =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_GOOGLE_API_KEY
     : "";
+
+// Marvel API key. In development we use mockserver and a fake key.
 const marvelApiKey =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_MARVEL_API_KEY
     : "foo";
+
+// Size of a page in Main
 const pageSize = 2;
+
+// Url prefix to use on all API requests
 const baseUrl =
   process.env.NODE_ENV === "production"
     ? "https://gateway.marvel.com:443/v1/public"
     : "http://localhost:9000";
-const maxContentLength = 102400;
-const maxPage = 9999;
 
+// Max content length supported by Axios requests in bytes
+const maxContentLength = 102400;
+
+// Hard limit - max value for page in Main
+const maxPage = 999999;
+
+// Labels to use for url in Detail component
 const urlLabels = {
   detail: "More details",
   wiki: "Character Wiki",
   comiclink: "Comics"
 };
 
+// styled-components theme object
 const theme = {
   fontsize: {
     xs: "0.75rem",
@@ -61,6 +77,10 @@ const theme = {
   boxShadow:
     "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
 };
+
+// ----------------------------------------------------------
+// --- Constant values to use directly, outside of config ---
+// ----------------------------------------------------------
 
 // Request is completed, show list.
 export const STATUS_IDLE = "status_idle";

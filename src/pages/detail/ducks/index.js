@@ -1,3 +1,4 @@
+// "detail" slice, used on Detail to show a character information.
 import { createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
 import {
@@ -7,11 +8,13 @@ import {
 } from "../../../shared/constants";
 
 const detailSlice = createSlice({
-  name: "detail",
+  name: "detail", // slice name, used in components as state.detail
   initialState: {
     status: STATUS_LOADING, // used to toggle loader
+    // for each child key is character id, content is character object
     charactersById: {},
     error: "", // error message from API request
+    // current character id. On Detail unmount is reset to null
     id: null
   },
   reducers: {
@@ -56,6 +59,7 @@ const detailSlice = createSlice({
   }
 });
 
+// Export and make actions available
 export const {
   startCharacterLoading,
   endCharacterLoading,
@@ -64,17 +68,11 @@ export const {
   storeCharacterId,
   resetCharacterPage
 } = detailSlice.actions;
-/*
-The biography of the superhero
-Any links available for the superhero (urls)
-
-https://gateway.marvel.com:443/v1/public/characters/1011334?apikey=4b31859bc9d554de059b279b79aea0c5
-*/
 
 /**
  * Stores character. Sends API request only if character wasn't already stored.
  * Array item is an object with format:
- *   {id, name, image, nComics, nSeries, nEvents, nStories, bio, urls [{type, url}]}
+ *   {id, name, description, image, nComics, nSeries, nEvents, nStories, urls [{type, url}]}
  * @param {Number} characterId - Character id
  * @param {Object} charactersById - Characters by id stored in slice
  */
@@ -83,9 +81,6 @@ export const fetchCharacter = (
   charactersById
 ) => async dispatch => {
   dispatch(storeCharacterId({ id: characterId })); // Store character id
-
-  console.log("fetch character:", characterId, charactersById);
-
   if (charactersById[characterId]) {
     dispatch(endCharacterLoading()); // Character ready
     return; // Character already stored, exit
@@ -96,14 +91,18 @@ export const fetchCharacter = (
   try {
     const response = await Axios.get(`/characters/${characterId}`);
 
+    // Destructure response to obtain total and results
     const {
       data: {
         data: { total, results }
       }
     } = response;
     if (total !== 1) {
+      // Response didn't bring character info, error
       throw new Error("Character not found");
     }
+
+    // Store character destructuring to get only relevant information.
     const {
       id,
       name,
@@ -132,24 +131,8 @@ export const fetchCharacter = (
   } catch (error) {
     // In a production environment we should store error details
     // in an external service like Sentry (https://sentry.io)
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else if (error.request) {
-      // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-      // http.ClientRequest in node.js
-      console.log(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.log("Error", error.message);
-    }
-
     // Request error, store error message
-    dispatch(storeCharacterError(error.message));
+    dispatch(storeCharacterError(error.message || "Unknown error"));
   }
 };
 

@@ -1,3 +1,5 @@
+// Detail Card component to show character information.
+// This is based on the Main card so there is some code that could be refactored between both cards and so reduce duplication.
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -6,6 +8,7 @@ import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
 import config from "../../shared/constants";
 
+// Styles for component container
 const StyledCard = styled.button`
   font-size: ${props => props.theme.fontsize.xs};
   border-radius: ${props => props.theme.dim.size1};
@@ -15,11 +18,13 @@ const StyledCard = styled.button`
   padding: ${props => props.theme.dim.size2};
   text-align: left;
   width: 100%;
+  /* Responsive rules, pagination component changes UI for mobile */
   @media (min-width: 640px) {
     font-size: ${props => props.theme.fontsize.base};
   }
 `;
 
+// Styles for CSS Grid isinde component
 const StyledCardGrid = styled.div`
   display: grid;
   justify-content: stretch;
@@ -60,6 +65,7 @@ const StyledCardGrid = styled.div`
     grid-area: area_urls;
   }
 
+  /* Responsive rules, pagination component changes UI for mobile */
   @media (min-width: 640px) {
     & .thumb {
       justify-self: left;
@@ -80,6 +86,7 @@ const StyledCardGrid = styled.div`
   }
 `;
 
+//Styles for URLS at card bottom
 const StyledUrls = styled.div`
   margin-top: ${props => props.theme.dim.size2};
   color: ${props => props.theme.color.red};
@@ -87,6 +94,7 @@ const StyledUrls = styled.div`
   line-height: ${props => props.theme.dim.size6};
 `;
 
+// Styles for image
 const StyledImg = styled.img`
   width: 100%;
   height: 100%;
@@ -96,12 +104,14 @@ const StyledImg = styled.img`
   object-fit: scale-down;
 `;
 
+// Styles for Yes icon (Note: could be refactored to avoid dup)
 export const StyledIconYes = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.blue};
   width: ${props => props.theme.dim.size3};
   padding-right: ${props => props.theme.dim.size1};
 `;
 
+// Styles for No icon (Note: could be refactored to avoid dup)
 export const StyledIconNo = styled(FontAwesomeIcon)`
   color: ${props => props.theme.color.red};
   width: ${props => props.theme.dim.size3};
@@ -109,9 +119,19 @@ export const StyledIconNo = styled(FontAwesomeIcon)`
 `;
 
 const Card = ({ character, history }) => {
+  // Replace url type as received from API response with a more meaningful label
   const getUrlLabel = text =>
     config.urlLabels[text] ? config.urlLabels[text] : text;
 
+  /**
+   * IMPORTANT: Could be refactored to avoid dup with src/pages/main/card.js
+   * Builds and returns a DIV containing the flag icon (Yes if counter > 0, toherwise No) and label related to counter. Example:
+   *   <div><ICON> 1 event</div>
+   * @param {Number} counter - total items
+   * @param {String} singular - label to show if counter === 1
+   * @param {String} plural - label to show if counter !== 1
+   * @returns {Object} - DIV
+   */
   const renderRow = (counter, singular, plural) => {
     const label = counter === 1 ? singular : plural;
     if (counter > 0) {
@@ -131,10 +151,8 @@ const Card = ({ character, history }) => {
     );
   };
 
-  const handleClick = () => history.push(`/character/${character.id}`);
-
   return (
-    <StyledCard onClick={handleClick}>
+    <StyledCard>
       <StyledCardGrid>
         <div className="thumb">
           <StyledImg src={character.image} alt="thumbnail" />
@@ -150,6 +168,7 @@ const Card = ({ character, history }) => {
           {renderRow(character.nStories, "story", "stories")}
         </div>
         <StyledUrls className="urls">
+          {/* Show urls section only if property is defined. If it is defined but no urls received shows a message. */}
           {character.urls && character.urls.length > 0 ? (
             <ul>
               {character.urls.map((link, idx) => (

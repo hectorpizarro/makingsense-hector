@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
   detail
 });
 
-// Redux dev tools only available on dev environment
+// configureStore adds browser devtools, thunk automatically
 const store = configureStore({ reducer: rootReducer });
 
 export default store;
