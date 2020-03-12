@@ -1,11 +1,11 @@
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
-const Axios = require("Axios");
+const axios = require("axios");
 require("dotenv").config();
 
-Axios.defaults.baseURL = process.env.BASE_URL;
-Axios.defaults.headers.common["Referer"] = process.env.REFERER;
+axios.defaults.baseURL = process.env.BASE_URL;
+axios.defaults.headers.common["Referer"] = process.env.REFERER;
 
 const app = express();
 app.use(logger("dev"));
@@ -29,7 +29,7 @@ app.get("/characters", async (req, res) => {
     apikey: process.env.REACT_APP_MARVEL_API_KEY
   };
   try {
-    const response = await Axios.get("/characters", { params });
+    const response = await axios.get("/characters", { params });
     res.status(200).json(response.data);
   } catch (error) {
     res.status(error.response.status).json(error.response.message);
@@ -40,7 +40,7 @@ app.get("/characters/:id", async (req, res) => {
   const { id } = req.params;
   const params = { apikey: process.env.REACT_APP_MARVEL_API_KEY };
   try {
-    const response = await Axios.get(`/characters/${id}`, { params });
+    const response = await axios.get(`/characters/${id}`, { params });
     res.status(200).json(response.data);
   } catch (error) {
     res.status(error.response.status).json(error.response.message);
