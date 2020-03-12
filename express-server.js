@@ -48,8 +48,8 @@ app.get("/characters/:id", async (req, res) => {
 });
 
 // Default route loads build/index.html
-app.use((req, res) =>
-  res.sendFile(path.join(__dirname, "build", "index.html"))
-);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.listen(process.env.PORT || 9001);
