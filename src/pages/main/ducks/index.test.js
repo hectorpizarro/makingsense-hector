@@ -63,6 +63,7 @@ describe("Redux characters slice", () => {
 
   describe("Test reducers", () => {
     const initialState = {
+      attributionText: "",
       byPage: {},
       status: STATUS_LOADING,
       totalPages: 0,
@@ -100,13 +101,18 @@ describe("Redux characters slice", () => {
 
     it("should handle storePage()", () => {
       const initial = { ...initialState };
+      const attributionText = "foo";
       const totalPages = 2;
       const characters = [];
       const page = 1;
       expect(
-        charactersReducer(initial, storePage({ totalPages, characters, page }))
+        charactersReducer(
+          initial,
+          storePage({ attributionText, totalPages, characters, page })
+        )
       ).toEqual({
         ...initialState,
+        attributionText,
         totalPages,
         status: STATUS_LOADED,
         error: "",

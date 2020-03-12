@@ -10,6 +10,7 @@ import config, {
 const charactersSlice = createSlice({
   name: "characters", // slice name, used in components as state.characters
   initialState: {
+    attributionText: "", // received on all API requests, required by Marvel
     byPage: {}, // for each child key is page, content is characters array
     status: STATUS_LOADING, // used to toggle loader
     totalPages: 0, // set after every API request
@@ -41,7 +42,9 @@ const charactersSlice = createSlice({
 
     // Set status to loaded, store page characters and total pages
     storePage(state, action) {
-      const { totalPages, characters, page } = action.payload;
+      const { totalPages, characters, page, attributionText } = action.payload;
+      console.log("action.payload", action.payload);
+      state.attributionText = attributionText;
       state.byPage[page] = characters;
       state.totalPages = totalPages;
       state.status = STATUS_LOADED;
@@ -95,6 +98,7 @@ export const fetchPageCharacters = (
     // Destructure response to obtain total and results
     const {
       data: {
+        attributionText,
         data: { total, results }
       }
     } = response;
@@ -123,7 +127,7 @@ export const fetchPageCharacters = (
     );
 
     // Request successful, store pages total, characters array, page
-    dispatch(storePage({ totalPages, characters, page }));
+    dispatch(storePage({ attributionText, totalPages, characters, page }));
   } catch (error) {
     // In a production environment we should store error details
     // in an external service like Sentry (https://sentry.io)

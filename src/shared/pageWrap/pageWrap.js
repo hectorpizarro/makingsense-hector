@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import config from "../constants";
 
 // Styles for container
 const StyledPage = styled.main`
@@ -38,7 +39,24 @@ const StyledIconLeft = styled(FontAwesomeIcon)`
   padding-right: ${props => props.theme.dim.size2};
 `;
 
-const PageWrap = ({ title, withBack, history, page, children }) => {
+// Styles for Marvel attribution row
+const StyledAttribution = styled.div`
+  a {
+    padding-left: ${props => props.theme.dim.size2};
+    font-size: ${props => props.theme.fontsize.xs};
+    color: ${props => props.theme.color.gray5};
+    text-decoration: underline;
+  }
+`;
+
+const PageWrap = ({
+  title,
+  withBack,
+  history,
+  page,
+  children,
+  attributionText
+}) => {
   /**
    * Loads Main on last page loaded.
    */
@@ -55,6 +73,16 @@ const PageWrap = ({ title, withBack, history, page, children }) => {
           </StyledButton>
         )}
       </StyledTitle>
+      <StyledAttribution>
+        <a
+          href={config.marvelUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Marvel Link"
+        >
+          {attributionText}
+        </a>
+      </StyledAttribution>
       {children}
     </StyledPage>
   );
@@ -65,11 +93,16 @@ PageWrap.propTypes = {
   withBack: PropTypes.bool, // If TRUE show Back button to go to Main
   children: PropTypes.node.isRequired, // page content in a single node
   page: PropTypes.number.isRequired, // current page
-  history: PropTypes.object.isRequired // Provided by withRoute
+  history: PropTypes.object.isRequired, // Provided by withRoute
+  // Attribution link required by Marvel
+  attributionText: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  page: state.characters.page // current page
+  page: state.characters.page, // current page
+  // This should be improved. attributionText can be set as a props on caller
+  attributionText:
+    state.characters.attributionText || state.detail.attributionText
 });
 
 export default connect(mapStateToProps)(withRouter(PageWrap));

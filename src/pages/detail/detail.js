@@ -46,8 +46,6 @@ const Detail = ({
         toast.error("Error loading character, please reload.");
         // Go back to last Main page viewed
         history.push(`/characters/${page}`);
-        // Error message should be logged to external service like Sentry
-        // console.log(loadError);
       }
       dispatch(endCharacterLoading());
     }

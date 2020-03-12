@@ -10,6 +10,7 @@ import {
 const detailSlice = createSlice({
   name: "detail", // slice name, used in components as state.detail
   initialState: {
+    attributionText: "", // received on all API requests, required by Marvel
     status: STATUS_LOADING, // used to toggle loader
     // for each child key is character id, content is character object
     charactersById: {},
@@ -39,7 +40,8 @@ const detailSlice = createSlice({
 
     // Set status to loaded, store character
     storeCharacter(state, action) {
-      const { id, character } = action.payload;
+      const { id, character, attributionText } = action.payload;
+      state.attributionText = attributionText;
       state.charactersById[id] = character;
       state.status = STATUS_LOADED;
       state.error = "";
@@ -94,6 +96,7 @@ export const fetchCharacter = (
     // Destructure response to obtain total and results
     const {
       data: {
+        attributionText,
         data: { total, results }
       }
     } = response;
@@ -127,7 +130,7 @@ export const fetchCharacter = (
     };
 
     // Request successful, store character
-    dispatch(storeCharacter({ id, character }));
+    dispatch(storeCharacter({ attributionText, id, character }));
   } catch (error) {
     // In a production environment we should store error details
     // in an external service like Sentry (https://sentry.io)

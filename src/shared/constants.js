@@ -35,6 +35,9 @@ const urlLabels = {
   comiclink: "Comics"
 };
 
+// Marvel url used for required attribution
+const marvelUrl = "http://marvel.com";
+
 // styled-components theme object
 const theme = {
   fontsize: {
@@ -100,6 +103,7 @@ const config = {
   maxContentLength,
   maxPage,
   urlLabels,
+  marvelUrl,
   theme
 };
 
