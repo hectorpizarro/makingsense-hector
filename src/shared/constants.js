@@ -13,14 +13,15 @@ const marvelApiKey =
     ? process.env.REACT_APP_MARVEL_API_KEY
     : "foo";
 
-// Size of a page in Main
-const pageSize = 2;
-
 // Url prefix to use on all API requests
 const baseUrl =
   process.env.NODE_ENV === "production"
     ? "https://gateway.marvel.com:443/v1/public"
     : "http://localhost:9000";
+
+// Size of a page in Mainnpm start
+
+const pageSize = 2;
 
 // Max content length supported by Axios requests in bytes
 const maxContentLength = 102400;

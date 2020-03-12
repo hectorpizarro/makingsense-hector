@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { mount } from "enzyme";
 import mockAxios from "axios";
-import App from "./app";
+import App from "./myapp";
 import store from "./store";
 import config from "./shared/constants";
 import Main from "./pages/main/main";
@@ -34,7 +34,7 @@ describe("<App />", () => {
   // Any API GET request will return a mocked response.
   // Response is not used on tests, it is provided to comply the flow.
   beforeAll(() => {
-    mockAxios.get.mockResolvedValue({
+    mockAxios.get.mockResolvedValueOnce({
       data: { data: { total: 0, results: [] } }
     });
   });

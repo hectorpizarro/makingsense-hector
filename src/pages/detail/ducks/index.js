@@ -1,7 +1,7 @@
 // "detail" slice, used on Detail to show a character information.
 import { createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
-import {
+import config, {
   STATUS_IDLE,
   STATUS_LOADING,
   STATUS_LOADED
@@ -91,7 +91,10 @@ export const fetchCharacter = (
 
   dispatch(startCharacterLoading()); // Set status to show loader
   try {
-    const response = await Axios.get(`/characters/${characterId}`);
+    const params = {
+      apikey: config.marvelApiKey
+    };
+    const response = await Axios.get(`/characters/${characterId}`, { params });
 
     // Destructure response to obtain total and results
     const {

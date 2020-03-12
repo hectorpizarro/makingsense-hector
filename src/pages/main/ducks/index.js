@@ -43,7 +43,6 @@ const charactersSlice = createSlice({
     // Set status to loaded, store page characters and total pages
     storePage(state, action) {
       const { totalPages, characters, page, attributionText } = action.payload;
-      console.log("action.payload", action.payload);
       state.attributionText = attributionText;
       state.byPage[page] = characters;
       state.totalPages = totalPages;
@@ -89,7 +88,8 @@ export const fetchPageCharacters = (
   const params = {
     page,
     orderBy: "name",
-    limit: config.pageSize
+    limit: config.pageSize,
+    apikey: config.marvelApiKey
   };
   try {
     // Send API request. base url and apiKey are added in Axios setup in app.js
@@ -102,6 +102,7 @@ export const fetchPageCharacters = (
         data: { total, results }
       }
     } = response;
+
     // Calculate total pages based on total records and page size
     const totalPages = total === 0 ? 1 : Math.ceil(total / config.pageSize);
 
@@ -132,7 +133,7 @@ export const fetchPageCharacters = (
     // In a production environment we should store error details
     // in an external service like Sentry (https://sentry.io)
     // Request error, store error message
-    dispatch(storeError(error.message || "Unknown error"));
+    dispatch(storeError({ error: error.message || "Unknown error" }));
   }
 };
 

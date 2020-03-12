@@ -26,12 +26,6 @@ toast.configure({
  */
 Axios.defaults.baseURL = config.baseUrl;
 Axios.defaults.maxContentLength = config.maxContentLength;
-Axios.defaults.transformRequest = (obj = {}) => {
-  obj.apiKey = config.marvelApiKey;
-  return Object.keys(obj)
-    .map(p => `${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`)
-    .join("&");
-};
 
 /**
  * Returns true if provided 'param' is a numeric int string and:

@@ -1,10 +1,15 @@
 // unit tests "characters" slice actions, reducers.
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import mockAxios from "axios";
+
 import {
   startLoading,
   endLoading,
   storeError,
   storePage,
-  storePageId
+  storePageId,
+  fetchPageCharacters
 } from "./index";
 import charactersReducer from "./index";
 import {
@@ -12,6 +17,20 @@ import {
   STATUS_LOADING,
   STATUS_LOADED
 } from "../../../shared/constants";
+
+const initialState = {
+  attributionText: "",
+  byPage: {},
+  status: STATUS_LOADING,
+  totalPages: 0,
+  page: 1,
+  error: ""
+};
+
+// Used to test async action using dispatch(), see "Test async actions" down
+const middlewares = [thunk];
+// Used to test async action using dispatch(), see "Test async actions" down
+const mockStore = configureMockStore(middlewares);
 
 describe("Redux characters slice", () => {
   describe("Test actions", () => {
@@ -62,15 +81,6 @@ describe("Redux characters slice", () => {
   });
 
   describe("Test reducers", () => {
-    const initialState = {
-      attributionText: "",
-      byPage: {},
-      status: STATUS_LOADING,
-      totalPages: 0,
-      page: 1,
-      error: ""
-    };
-
     it("should return the initial state", () => {
       expect(charactersReducer(undefined, {})).toEqual(initialState);
     });
@@ -131,9 +141,105 @@ describe("Redux characters slice", () => {
       });
     });
   });
-  //   describe("Test async actions", () => {
-  //     it("should handle fetchPageCharacters()", () => {
 
-  //     });
-  // });
+  // Test fetchPageCharacters async action, uses multiple dispatch()
+  describe("Test async actions with fetchPageCharacters()", () => {
+    // Page was already stored, no API call
+    it("Page data already stored", () => {
+      const expectedActions = [
+        { type: "characters/storePageId", payload: { page: 1 } }
+      ];
+      const store = mockStore({ characters: initialState });
+
+      return store
+        .dispatch(fetchPageCharacters(1, { 1: { foo: "bar" } }))
+        .then(() => {
+          // return of async actions
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+    });
+
+    // API response is invalid
+    it("Bad API response", () => {
+      mockAxios.get.mockResolvedValueOnce({
+        data: { data: {} }
+      });
+
+      const expectedActions = [
+        { type: "characters/storePageId", payload: { page: 1 } },
+        { type: "characters/startLoading", payload: undefined },
+        {
+          type: "characters/storeError",
+          payload: {
+            error: "Cannot read property 'map' of undefined"
+          }
+        }
+      ];
+      const store = mockStore({ characters: initialState });
+
+      return store.dispatch(fetchPageCharacters(1, {})).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    // API response valid, no characters returned
+    it("No characters on response", () => {
+      mockAxios.get.mockResolvedValueOnce({
+        data: {
+          code: 200,
+          status: "Ok",
+          attributionText: "Data provided by Marvel. © 2020 MARVEL",
+          data: {
+            offset: 0,
+            limit: 5,
+            total: 0,
+            count: 0,
+            results: []
+          }
+        }
+      });
+
+      const expectedActions = [
+        { type: "characters/storePageId", payload: { page: 1 } },
+        { type: "characters/startLoading", payload: undefined },
+        {
+          type: "characters/storePage",
+          payload: {
+            attributionText: "Data provided by Marvel. © 2020 MARVEL",
+            characters: [],
+            page: 1,
+            totalPages: 1
+          }
+        }
+      ];
+      const store = mockStore({ characters: initialState });
+
+      return store.dispatch(fetchPageCharacters(1, {})).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+
+    // API response returns network error
+    it("Network error", () => {
+      const createError = require("http-errors");
+
+      mockAxios.get.mockRejectedValueOnce(createError(401, "foo bar"));
+
+      const expectedActions = [
+        { type: "characters/storePageId", payload: { page: 1 } },
+        { type: "characters/startLoading", payload: undefined },
+        {
+          type: "characters/storeError",
+          payload: {
+            error: "foo bar"
+          }
+        }
+      ];
+      const store = mockStore({ characters: initialState });
+
+      return store.dispatch(fetchPageCharacters(1, {})).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+  });
 });
