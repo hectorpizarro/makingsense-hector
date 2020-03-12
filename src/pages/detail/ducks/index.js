@@ -46,6 +46,12 @@ const detailSlice = createSlice({
     storeCharacterId(state, action) {
       const { id } = action.payload;
       state.id = id;
+    },
+
+    // Resets store when Detail is unmounted
+    resetCharacterPage(state, action) {
+      state.status = STATUS_LOADING;
+      state.id = null;
     }
   }
 });
@@ -55,7 +61,8 @@ export const {
   endCharacterLoading,
   storeCharacterError,
   storeCharacter,
-  storeCharacterId
+  storeCharacterId,
+  resetCharacterPage
 } = detailSlice.actions;
 /*
 The biography of the superhero
@@ -80,6 +87,7 @@ export const fetchCharacter = (
   console.log("fetch character:", characterId, charactersById);
 
   if (charactersById[characterId]) {
+    dispatch(endCharacterLoading()); // Character ready
     return; // Character already stored, exit
   }
   // Character not stored, start request

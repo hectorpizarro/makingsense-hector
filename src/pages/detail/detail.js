@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { withRouter } from "react-router-dom";
-import { fetchCharacter, endCharacterLoading, storeCharacterId } from "./ducks";
+import {
+  fetchCharacter,
+  endCharacterLoading,
+  storeCharacterId,
+  resetCharacterPage
+} from "./ducks";
 import {
   STATUS_LOADED,
   STATUS_LOADING,
@@ -29,7 +34,7 @@ const Detail = ({
     dispatch(fetchCharacter(id, charactersById));
     return () => {
       // clear character id on umount
-      dispatch(storeCharacterId({ id: null }));
+      dispatch(resetCharacterPage());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
