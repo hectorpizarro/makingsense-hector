@@ -19,8 +19,7 @@ const baseUrl =
     ? "https://gateway.marvel.com:443/v1/public"
     : "http://localhost:9000";
 
-// Size of a page in Mainnpm start
-
+// Size of a page in Main
 const pageSize = 2;
 
 // Max content length supported by Axios requests in bytes

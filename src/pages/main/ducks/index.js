@@ -86,7 +86,7 @@ export const fetchPageCharacters = (
 
   dispatch(startLoading()); // Set status to show loader
   const params = {
-    page,
+    offset: page - 1,
     orderBy: "name",
     limit: config.pageSize,
     apikey: config.marvelApiKey
