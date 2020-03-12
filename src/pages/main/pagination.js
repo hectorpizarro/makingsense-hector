@@ -7,7 +7,7 @@ import {
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { STATUS_LOADING } from "./ducks";
+import { STATUS_LOADING } from "../../shared/constants";
 
 const StyledPagination = styled.div`
   font-size: ${props => props.theme.fontsize.xs};

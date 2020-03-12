@@ -1,26 +1,17 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect, useDispatch } from "react-redux";
-import styled from "styled-components";
+import { toast } from "react-toastify";
 import Loader from "../../shared/loader/loader";
-import {
-  fetchPageCharacters,
-  STATUS_LOADING,
-  STATUS_IDLE,
-  STATUS_LOADED,
-  endLoading
-} from "./ducks";
+import { fetchPageCharacters, endLoading } from "./ducks";
 import Card from "./card";
 import Pagination from "./pagination";
-import { toast } from "react-toastify";
-
-const StyledMain = styled.main`
-  padding: ${props => props.theme.dim.size4};
-`;
-
-const StyledTitle = styled.h2`
-  padding: ${props => props.theme.dim.size2};
-`;
+import {
+  STATUS_IDLE,
+  STATUS_LOADING,
+  STATUS_LOADED
+} from "../../shared/constants";
+import PageWrap from "../../shared/pageWrap/pageWrap";
 
 const Main = ({
   charactersByPage,
@@ -32,12 +23,6 @@ const Main = ({
 }) => {
   const dispatch = useDispatch();
 
-  // Called once when component is mounted
-  useEffect(() => {
-    dispatch(fetchPageCharacters(page, charactersByPage));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // Called every time page changes on url
   useEffect(() => {
     dispatch(fetchPageCharacters(page, charactersByPage));
@@ -48,7 +33,7 @@ const Main = ({
   useEffect(() => {
     if (loadStatus === STATUS_LOADED) {
       if (loadError) {
-        toast.error("Error loading experiences data, please reload.");
+        toast.error("Error loading characters, please reload.");
         // Error message should be logged to external service like Sentry
         // console.log(loadError);
       }
@@ -60,22 +45,22 @@ const Main = ({
   switch (loadStatus) {
     case STATUS_LOADING:
       return (
-        <StyledMain>
-          <StyledTitle>Marvel Characters</StyledTitle>
-          <Pagination
-            totalPages={totalPages}
-            page={page}
-            loadStatus={loadStatus}
-          />
-          <Loader />
-        </StyledMain>
+        <PageWrap title="Marvel Characters">
+          <div>
+            <Pagination
+              totalPages={totalPages}
+              page={page}
+              loadStatus={loadStatus}
+            />
+            <Loader />
+          </div>
+        </PageWrap>
       );
     case STATUS_IDLE: {
       return (
-        <StyledMain>
-          <StyledTitle>Marvel Characters</StyledTitle>
-          <Pagination totalPages={totalPages} page={page} />
+        <PageWrap title="Marvel Characters">
           <div>
+            <Pagination totalPages={totalPages} page={page} />
             {pageCharacters.length === 0
               ? "No characters on this page."
               : pageCharacters.map(character => (
@@ -86,7 +71,7 @@ const Main = ({
                   />
                 ))}
           </div>
-        </StyledMain>
+        </PageWrap>
       );
     }
     case STATUS_LOADED:
@@ -98,12 +83,12 @@ const Main = ({
 
 Main.propTypes = {
   pageCharacters: PropTypes.array,
-  characters: PropTypes.array,
+  charactersByPage: PropTypes.object,
   loadStatus: PropTypes.string.isRequired,
-  loaderror: PropTypes.string,
+  loadError: PropTypes.string,
+  totalPages: PropTypes.number.isRequired,
   // Provided from route
-  page: PropTypes.number.isRequired,
-  totalPages: PropTypes.number.isRequired
+  page: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({

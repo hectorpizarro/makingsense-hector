@@ -14,6 +14,12 @@ const baseUrl =
 const maxContentLength = 102400;
 const maxPage = 9999;
 
+const urlLabels = {
+  detail: "More details",
+  wiki: "Character Wiki",
+  comiclink: "Comics"
+};
+
 const theme = {
   fontsize: {
     xs: "0.75rem",
@@ -56,6 +62,16 @@ const theme = {
     "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
 };
 
+// Request is completed, show list.
+export const STATUS_IDLE = "status_idle";
+
+// API request in progress, used to show loader.
+export const STATUS_LOADING = "status_loading";
+
+// Page is loaded, result or error is waiting to be handled.
+// Used to show error message if available.
+export const STATUS_LOADED = "status_loaded";
+
 const config = {
   googleApiKey,
   marvelApiKey,
@@ -63,6 +79,7 @@ const config = {
   baseUrl,
   maxContentLength,
   maxPage,
+  urlLabels,
   theme
 };
 

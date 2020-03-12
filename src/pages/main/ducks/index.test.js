@@ -3,12 +3,14 @@ import {
   endLoading,
   storeError,
   storePage,
-  setPage,
-  STATUS_LOADING,
-  STATUS_IDLE,
-  STATUS_LOADED
+  setPage
 } from "./index";
 import charactersReducer from "./index";
+import {
+  STATUS_IDLE,
+  STATUS_LOADING,
+  STATUS_LOADED
+} from "../../../shared/constants";
 
 describe("Redux characters slice", () => {
   describe("Test actions", () => {

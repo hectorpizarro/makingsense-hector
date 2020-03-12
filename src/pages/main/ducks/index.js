@@ -1,16 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Axios from "axios";
-import config from "../../../shared/constants";
-
-// Request is completed, show list.
-export const STATUS_IDLE = "status_idle";
-
-// API request in progress, used to show loader.
-export const STATUS_LOADING = "status_loading";
-
-// Page is loaded, result or error is waiting to be handled.
-// Used to show error message if available.
-export const STATUS_LOADED = "status_loaded";
+import config, {
+  STATUS_IDLE,
+  STATUS_LOADING,
+  STATUS_LOADED
+} from "../../../shared/constants";
 
 const charactersSlice = createSlice({
   name: "characters",

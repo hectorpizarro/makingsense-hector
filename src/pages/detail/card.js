@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
+import config from "../../shared/constants";
 
 const StyledCard = styled.button`
   font-size: ${props => props.theme.fontsize.xs};
@@ -13,7 +14,10 @@ const StyledCard = styled.button`
   margin: ${props => props.theme.dim.size2};
   padding: ${props => props.theme.dim.size2};
   text-align: left;
-  cursor: pointer;
+  width: 100%;
+  @media (min-width: 640px) {
+    font-size: ${props => props.theme.fontsize.base};
+  }
 `;
 
 const StyledCardGrid = styled.div`
@@ -22,41 +26,38 @@ const StyledCardGrid = styled.div`
   column-gap: ${props => props.theme.dim.size3};
   row-gap: 0px;
   grid-template-columns: 1fr;
-  grid-template-rows: auto ${props => props.theme.dim.size6} 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto ${props => props.theme.dim.size7} 1fr 1fr 1fr;
   grid-template-areas:
     "area_thumb"
     "area_title"
-    "area_ncomics"
-    "area_nseries"
-    "area_nevents"
-    "area_nstories";
+    "area_description"
+    "area_stats"
+    "area_urls";
 
   & .thumb {
-    width: 100px;
     grid-area: area_thumb;
     justify-self: center;
   }
   & .title {
-    font-size: ${props => props.theme.fontsize.base};
+    font-size: ${props => props.theme.fontsize.lg};
     font-weight: 700;
     width: 100%;
     max-width: 300px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    align-self: center;
     grid-area: area_title;
   }
-  & .ncomics {
-    grid-area: area_ncomics;
+  & .description {
+    grid-area: area_description;
   }
-  & .nseries {
-    grid-area: area_nseries;
+  & .stats {
+    grid-area: area_stats;
+    padding-top: ${props => props.theme.dim.size2};
   }
-  & .nevents {
-    grid-area: area_nevents;
-  }
-  & .nstories {
-    grid-area: area_nstories;
+  & .urls {
+    grid-area: area_urls;
   }
 
   @media (min-width: 640px) {
@@ -64,22 +65,31 @@ const StyledCardGrid = styled.div`
       justify-self: left;
     }
     & .title {
-      font-size: ${props => props.theme.fontsize.lg};
+      font-size: ${props => props.theme.fontsize.xl1};
+      max-width: 100%;
+      align-self: start;
     }
-    grid-template-columns: 100px 1fr;
-    grid-template-rows: ${props => props.theme.dim.size6} 1fr 1fr 1fr 1fr;
+    grid-template-columns: 50vw 1fr;
+    column-gap: ${props => props.theme.dim.size6};
+    grid-template-rows: ${props => props.theme.dim.size7} auto 1fr auto;
     grid-template-areas:
       "area_thumb area_title"
-      "area_thumb area_ncomics"
-      "area_thumb area_nseries"
-      "area_thumb area_nevents"
-      "area_thumb area_nstories";
+      "area_thumb area_description"
+      "area_thumb area_stats"
+      "area_thumb area_urls";
   }
 `;
 
+const StyledUrls = styled.div`
+  margin-top: ${props => props.theme.dim.size2};
+  color: ${props => props.theme.color.red};
+  text-decoration: underline;
+  line-height: ${props => props.theme.dim.size6};
+`;
+
 const StyledImg = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   background-color: black;
   border: 1px solid ${props => props.theme.color.gray6};
   border-radius: ${props => props.theme.dim.size2};
@@ -99,6 +109,9 @@ export const StyledIconNo = styled(FontAwesomeIcon)`
 `;
 
 const Card = ({ character, history }) => {
+  const getUrlLabel = text =>
+    config.urlLabels[text] ? config.urlLabels[text] : text;
+
   const renderRow = (counter, singular, plural) => {
     const label = counter === 1 ? singular : plural;
     if (counter > 0) {
@@ -127,18 +140,35 @@ const Card = ({ character, history }) => {
           <StyledImg src={character.image} alt="thumbnail" />
         </div>
         <div className="title">{character.name}</div>
-        <div className="ncomics">
+        <div className="description">
+          {character.description || "No description available"}
+        </div>
+        <div className="stats">
           {renderRow(character.nComics, "comic", "comics")}
-        </div>
-        <div className="nseries">
           {renderRow(character.nSeries, "series", "series")}
-        </div>
-        <div className="nevents">
           {renderRow(character.nEvents, "event", "events")}
-        </div>
-        <div className="nstories">
           {renderRow(character.nStories, "story", "stories")}
         </div>
+        <StyledUrls className="urls">
+          {character.urls && character.urls.length > 0 ? (
+            <ul>
+              {character.urls.map((link, idx) => (
+                <li key={idx}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Marvel Link"
+                  >
+                    {getUrlLabel(link.type)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            "No links available"
+          )}
+        </StyledUrls>
       </StyledCardGrid>
     </StyledCard>
   );

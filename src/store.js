@@ -6,10 +6,12 @@ import { configureStore } from "@reduxjs/toolkit";
 
 // All reducers
 import characters from "./pages/main/ducks";
+import detail from "./pages/detail/ducks";
 
 // Combine all storage in a single object
 const rootReducer = combineReducers({
-  characters
+  characters,
+  detail
 });
 
 // Redux dev tools only available on dev environment
