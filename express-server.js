@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "build")));
 // /ping route for testing purposes
 app.get("/ping", (req, res) => res.send("pong")); // Test API
 
-app.get("/characters", async (req, res) => {
+app.get("/api/characters", async (req, res) => {
   const { offset, orderBy, limit } = req.query;
   const params = {
     offset,
@@ -36,7 +36,7 @@ app.get("/characters", async (req, res) => {
   }
 });
 
-app.get("/characters/:id", async (req, res) => {
+app.get("/api/characters/:id", async (req, res) => {
   const { id } = req.params;
   const params = { apikey: process.env.REACT_APP_MARVEL_API_KEY };
   try {

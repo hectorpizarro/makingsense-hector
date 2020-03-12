@@ -92,7 +92,7 @@ export const fetchPageCharacters = (
   };
   try {
     // Send API request. base url and apiKey are added in Axios setup in app.js
-    const response = await Axios.get("/characters", { params });
+    const response = await Axios.get("/api/characters", { params });
 
     // Destructure response to obtain total and results
     const {

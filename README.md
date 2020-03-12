@@ -3,7 +3,7 @@ MAKINGSENSE.COM CHALLENGE
 Hello, this is the project I created as response to the challenge provided on 2020-03-10.
 This code is running on production at this site:
 
-https://makingsense-challenge.herokuapp.com/characters/1
+https://makingsense-challenge.herokuapp.com
 
 This was deployed on a free Heroku instance, so it doesn't support too many concurrent users.
 

@@ -91,7 +91,7 @@ export const fetchCharacter = (
 
   dispatch(startCharacterLoading()); // Set status to show loader
   try {
-    const response = await Axios.get(`/characters/${characterId}`);
+    const response = await Axios.get(`/api/characters/${characterId}`);
 
     // Destructure response to obtain total and results
     const {
