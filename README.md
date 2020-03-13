@@ -5,15 +5,21 @@ This code is running on production at this site:
 
 https://makingsense-challenge.herokuapp.com
 
-This was deployed on a free Heroku instance, so it doesn't support too many concurrent users.
-
-The app is an Express server instance and a React web app created using create-react-app. On deploy the Express server runs and servers the web app from build/.
+The app is an Express server instance and a React web app created using create-react-app. On deploy the Express server runs and serves the web app from build/.
 
 On development I execute 'npm start' and work on the React app, it automatically sends API requests to Express using the 'proxy' option in package.json.
 
-The API public key is stored locally in an .env file, not included in the repository. On production is defined in the Heroku dashboard. Let me know if you need my key to run the code in localhost.
+The API public key is stored locally in an .env file, not included in the repository. On production is defined in the Heroku dashboard.
 
 The marvel attribution received from the API is shown on both pages, this is a requirement for Marvel API fair use.
+
+INSTALL
+
+You will need to define a .env file at the root of the codebase, I will send mine as an example through mail. Once the file is in place execute:
+
+  npm run start
+
+You will see Marvel data from localhost.
 
 DEPLOYMENT
 
